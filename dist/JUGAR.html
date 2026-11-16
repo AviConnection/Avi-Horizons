@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080910">
+  <meta name="description" content="AVI HORIZONS: Ecos del Tiempo. Diseña una expedición a Marte y explora 25 niveles de ciencia y aventura espacial.">
+  <title>AVI HORIZONS: Ecos del Tiempo</title>
+  <link rel="icon" href="assets/avi-horizons-logo.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="hub.css">
+  <link rel="stylesheet" href="mission.css">
+  <link rel="stylesheet" href="horizons.css">
+  <link rel="stylesheet" href="campaign.css">
+  <link rel="stylesheet" href="logbook.css">
+  <link rel="stylesheet" href="story.css">
+  <link rel="stylesheet" href="settings.css">
+  <link rel="stylesheet" href="main-menu.css">
+  <link rel="stylesheet" href="game-controls.css">
+  <link rel="stylesheet" href="faro.css">
+  <link rel="preload" as="image" href="assets/interstellar.webp">
+</head>
+<body>
+  <audio id="soundtrack" src="assets/audio/horizonte-estelar.mp3" preload="none" loop></audio>
+  <a class="skip-link" href="#mission-button">Ir al menú</a>
+  <section class="preloader" id="preloader" aria-label="Entrada de AVI HORIZONS">
+    <svg class="intro-logo" viewBox="0 0 1254 1254" role="img" aria-label="Logo de AVI HORIZONS">
+      <defs>
+        <!-- Use the logo's dark ink as opacity so the nebula shows through the white areas. -->
+        <filter id="intro-logo-cutout" color-interpolation-filters="sRGB">
+          <feColorMatrix type="matrix" values="
+            0  0    0  0  0.95
+            0  0    0  0  0.91
+            0  0    0  0  1
+            0 -1.24 0  0  1.2028"/>
+        </filter>
+      </defs>
+      <image href="assets/avi-horizons-logo.png" width="1254" height="1254" filter="url(#intro-logo-cutout)"/>
+    </svg>
+  </section>
+  <dialog id="desktop-only" class="panel" aria-labelledby="desktop-title">
+    <h2 id="desktop-title">Juega en una computadora</h2>
+    <p class="panel-description">AVI HORIZONS está diseñado para teclado y una pantalla horizontal. Amplía la ventana si ya estás en una computadora.</p>
+  </dialog>
+
+  <main id="main" inert>
+    <div class="universe" aria-hidden="true">
+      <canvas id="stars"></canvas>
+      <img class="station-art" src="assets/hero.webp" alt="">
+    </div>
+
+    <header class="home-toolbar">
+      <button class="icon-button" id="home-fullscreen" data-fullscreen aria-label="Pantalla completa" title="Pantalla completa" aria-pressed="false" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="expand-icon" d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/><path class="shrink-icon" d="M3 8h5V3m13 5h-5V3M8 21v-5H3m13 5v-5h5"/></svg>
+      </button>
+      <button class="home-settings" data-dialog="settings-dialog">Configuración</button>
+      <button class="icon-button" id="quick-sound" aria-label="Activar sonido" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5 5 9H2v6h3l5 4V5ZM15 9a5 5 0 0 1 0 6M18 6a9 9 0 0 1 0 12"/><path class="mute-slash" d="m3 3 18 18"/></svg></button>
+    </header>
+
+    <section class="home-menu" aria-labelledby="game-title">
+      <img class="logo home-logo" src="assets/avi-horizons-logo.png" alt="">
+      <h1 id="game-title">AVI HORIZONS</h1>
+      <nav class="home-actions" aria-label="Menú principal">
+        <button class="primary-action home-start" id="mission-button">
+          <span>Iniciar juego<small>Ecos de Marte · Modo historia</small></span>
+          <svg class="ui-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+        </button>
+        <button class="home-secondary faro-entry" id="faro-demo-button"><span>Probar Faro 7</span><small>Demo breve</small></button>
+        <button class="home-secondary" id="continue-mission" hidden><span>Continuar expedición</span><small id="continue-stage"></small></button>
+        <button class="home-secondary" id="campaign-button"><span>Explorar campaña</span><small>25 niveles</small></button>
+        <button class="home-secondary" id="station-button"><span>Explorar la estación</span></button>
+      </nav>
+      <div class="home-utilities">
+        
+        <details class="home-more">
+          <summary>Más opciones</summary>
+          <div class="home-more-items">
+            <button data-logbook>Bitácora de misión</button>
+            <button data-dialog="science-dialog">Archivo científico</button>
+            <button data-atlas>Atlas científico</button>
+            <button id="menu-star-map">Mapa estelar</button>
+            <button id="menu-time-lab">Laboratorio temporal</button>
+            <button data-crew="lyra">Tripulación</button>
+            <button data-dialog="credits-dialog">Créditos y fuentes</button>
+            <button id="replay-intro">Repetir entrada</button>
+          </div>
+        </details>
+      </div>
+      <div class="selected-pilot" id="selected-pilot" hidden><span id="pilot-status"></span><button id="change-pilot">Cambiar</button></div>
+    </section>
+
+    <footer class="home-footer">
+      <img class="home-publisher" src="assets/avi-connection-mark.svg" alt="AVI Connection" width="26" height="26">
+    </footer>
+  </main>
+
+  <section id="hub-screen" class="hub-screen" aria-labelledby="hub-title" hidden>
+    <header class="hub-header">
+      <button id="hub-home" class="hub-brand" aria-label="Abrir pausa de la estación"><img class="logo" src="assets/avi-horizons-logo.png" alt=""><span>AVI HORIZONS<small>AVI CONNECTION</small></span></button>
+      <div class="hub-heading"><h2 id="hub-title">CONNECTION SPACE</h2><span>ESTACIÓN ORBITAL <i>·</i> <span id="hub-floor">NIVEL 01</span></span></div>
+      <div class="hub-header-actions"><button class="crew-access" data-alex>Alex</button><button class="crew-access" data-crew="lyra">Tripulación</button><button class="crew-access" id="station-campaign">Campaña</button><button class="crew-access" data-logbook>Bitácora</button><button class="crew-access" data-atlas>Atlas</button><button id="hub-ability" class="hub-ability"><strong id="hub-pilot-name">AVI</strong><span id="hub-ability-label">Q · PULSO DISPONIBLE</span></button><button id="hub-pause" class="hub-pause" aria-label="Pausar exploración"><svg class="ui-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg></button></div>
+    </header>
+    <div class="hub-scene-viewport" id="hub-viewport">
+      <div class="hub-world" id="hub-world" tabindex="0" aria-label="Estación explorable. A y D o flechas para moverse, E para interactuar, Q para usar la habilidad. También puedes elegir las salas con Tab y Enter.">
+        <img class="hub-background" src="assets/connection-space-interior.png" alt="Interior 2D de una estación de dos niveles conectados por un ascensor central. Hangar, centro de control y laboratorio abajo; archivo científico y observatorio arriba.">
+        <div class="lift-shaft" aria-hidden="true"><div class="lift-cabin" id="lift-cabin"></div></div>
+        <nav class="hub-rooms" aria-label="Salas de CONNECTION SPACE">
+          <button class="hub-room-sign" data-room="archive" style="--x:21.9%;--y:17.2%;--w:17%" aria-label="Ir al archivo científico">ARCHIVO CIENTÍFICO<span class="room-visited" hidden>✓</span></button>
+          <button class="hub-room-sign" data-room="observatory" style="--x:75.8%;--y:17.2%;--w:17.5%" aria-label="Ir al observatorio">OBSERVATORIO<span class="room-visited" hidden>✓</span></button>
+          <button class="hub-room-sign" data-room="hangar" style="--x:18.7%;--y:55.5%;--w:10.3%" aria-label="Ir al hangar">HANGAR<span class="room-visited" hidden>✓</span></button>
+          <button class="hub-room-sign" data-room="control" style="--x:62.5%;--y:55.5%;--w:16.5%" aria-label="Ir al centro de control">CENTRO DE CONTROL<span class="room-visited" hidden>✓</span></button>
+          <button class="hub-room-sign" data-room="laboratory" style="--x:88.7%;--y:55.5%;--w:12.5%" aria-label="Ir al laboratorio">LABORATORIO<span class="room-visited" hidden>✓</span></button>
+        </nav>
+        <button class="lift-terminal" id="hub-lift" aria-label="Ir al ascensor y cambiar de nivel"><span aria-hidden="true">↑<br>↓</span></button>
+        <div class="hub-player" id="hub-player" role="img" aria-label="AVI en la estación"><span class="player-ring"></span><img id="hub-avi-sprite" class="character-sprite" src="assets/avi-explorer-v2.png" alt=""><img id="hub-maqui-sprite" class="character-sprite" src="assets/maqui-explorer.png" alt="" hidden><span class="pulse-wave" id="hub-pulse" hidden></span></div>
+        <button class="hub-proximity" id="hub-proximity" hidden></button>
+        <div class="station-crew" aria-label="Contactos de la estación"><button data-crew="teo" style="--crew-x:12%;--crew-y:69%"><img src="assets/teo.webp" alt=""><span>TEO · HABLAR</span></button><button data-crew="lyra" style="--crew-x:62%;--crew-y:69%"><img src="assets/lyra.webp" alt=""><span>LYRA · HABLAR</span></button><button data-crew="nova" style="--crew-x:83%;--crew-y:29%"><img src="assets/nova.webp" alt=""><span>NOVA · HABLAR</span></button></div><div class="hub-journey" id="hub-journey" hidden>EN CAMINO</div>
+      </div>
+    </div>
+    <footer class="hub-footer">
+      <div class="hub-objective"><span class="objective-symbol" aria-hidden="true"><svg class="ui-arrow" viewBox="0 0 24 24"><path d="M19 19 5 5M5 19V5h14"/></svg></span><div><span class="eyebrow">OBJETIVO ACTUAL</span><p id="hub-objective">Ve al hangar y prepara HORIZONS 1.</p></div></div>
+      <div class="hub-controls"><span><kbd>A</kbd><kbd>D</kbd> MOVERSE</span><button id="hub-interact" disabled><kbd>E</kbd> INTERACTUAR</button><span id="hub-progress">0 / 5 ÁREAS VISITADAS</span></div>
+    </footer>
+    <div class="hub-mobile-controls" aria-label="Controles de exploración"><button id="move-left" aria-label="Moverse a la izquierda">←</button><button id="move-right" aria-label="Moverse a la derecha">→</button><button id="mobile-interact" aria-label="Interactuar con el área cercana">E</button><button id="mobile-ability" aria-label="Usar habilidad">Q</button></div>
+    <button id="hub-expedition" class="hub-mission-access" hidden>PLANIFICAR ECOS DE MARTE ↗</button>
+    <div class="sr-only" id="hub-announcement" role="status" aria-live="polite"></div>
+  </section>
+
+  <dialog id="hub-room-dialog" class="panel hub-room-panel" aria-labelledby="hub-room-title"><div class="panel-top"><p class="eyebrow" id="hub-room-kicker">CONNECTION SPACE</p><button class="close-button" data-close aria-label="Volver a explorar">×</button></div><h2 id="hub-room-title">Hangar</h2><div id="hub-room-content"></div></dialog>
+  <dialog id="hub-pause-dialog" class="panel small-panel" aria-labelledby="hub-pause-title"><div class="panel-top"><p class="eyebrow">CONNECTION SPACE</p><button class="close-button" data-close aria-label="Reanudar exploración">×</button></div><h2 id="hub-pause-title">Una pausa para<br>mirar el <em>horizonte.</em></h2><p class="panel-description">Tu preparación y las áreas visitadas se conservan en este navegador cuando es posible.</p><div class="pause-actions"><button class="primary-action compact" id="hub-resume"><span>CONTINUAR EXPLORANDO</span><svg class="ui-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button><button class="menu-link" id="hub-settings">Configuración <svg class="ui-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button><button class="menu-link" id="hub-return-menu">Volver al menú principal <svg class="ui-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button></div></dialog>
+
+  <section class="expedition-screen" id="expedition-screen" aria-labelledby="expedition-title" hidden>
+    <header class="expedition-header"><button id="expedition-home" class="expedition-brand" aria-label="Pausar misión"><img class="logo" src="assets/avi-horizons-logo.png" alt=""><span>AVI HORIZONS<small>AVI CONNECTION</small></span></button><div><p class="eyebrow" id="expedition-stage">PLANIFICACIÓN</p><h2 id="expedition-title">ECOS DE MARTE</h2></div><div class="expedition-tools"><button data-alex>Alex</button><button data-logbook>Bitácora</button><button data-crew="lyra">Tripulación</button><button data-atlas>Atlas</button><button id="expedition-map" aria-label="Abrir mapa estelar">Mapa</button><button id="expedition-comms" aria-label="Abrir comunicaciones">Enlace <i id="message-count">0</i></button><button id="expedition-science" aria-label="Abrir archivo científico">Archivo</button><button id="expedition-pause" aria-label="Pausar misión"><svg class="ui-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg></button><span class="expedition-pilot" id="expedition-pilot">AVI</span></div></header>
+    <nav class="expedition-steps" id="expedition-steps" aria-label="Etapas de la expedición"></nav>
+    <div class="expedition-resources" id="expedition-resources"><div><span>PROPULSANTE · u.</span><strong id="resource-fuel">85</strong><i><b id="bar-fuel"></b></i></div><div><span>ENERGÍA · Wh</span><strong id="resource-energy">1000</strong><i><b id="bar-energy"></b></i></div><div><span>INTEGRIDAD</span><strong id="resource-integrity">100%</strong><i><b id="bar-integrity"></b></i></div><div><span>DATOS CONFIRMADOS</span><strong id="resource-data">0 MB</strong><small id="resource-data-detail">0 MB obtenidos</small></div></div>
+    <main class="expedition-content" id="expedition-content" tabindex="-1"></main>
+    <footer class="expedition-footer"><span><i class="status-dot"></i><span id="expedition-save">GUARDADO LOCAL</span></span><span id="expedition-clock">T + 0 d</span><span>EXPLORACIÓN · CIENCIA · NARRATIVA</span></footer>
+    <div class="sr-only" id="expedition-announcement" role="status" aria-live="polite"></div>
+  </section>
+  <dialog id="expedition-pause-dialog" class="panel small-panel" aria-labelledby="expedition-pause-title"><div class="panel-top"><p class="eyebrow">HORIZONS 1 / PAUSA</p><button class="close-button" data-close aria-label="Reanudar misión">×</button></div><h2 id="expedition-pause-title">La misión<br>puede <em>esperar.</em></h2><p class="panel-description">La simulación se detiene mientras consultas un panel. Tu progreso se guarda en este navegador.</p><div class="pause-actions"><button class="primary-action compact" id="expedition-resume"><span>CONTINUAR MISIÓN</span><span>↗</span></button><button class="menu-link" id="expedition-settings">Configuración</button><button class="menu-link" id="expedition-save-menu">Guardar y volver al menú</button><button class="menu-link danger-link" id="expedition-abort">Cerrar con resultado parcial</button></div></dialog>
+  <dialog id="expedition-replace-dialog" class="panel small-panel" aria-labelledby="replace-title"><div class="panel-top"><p class="eyebrow">UNA EXPEDICIÓN EN CURSO</p><button class="close-button" data-close aria-label="Conservar expedición actual">×</button></div><h2 id="replace-title">¿Retomamos<br>el <em>viaje?</em></h2><p class="panel-description">Ya tienes una partida guardada. Puedes continuarla o reemplazarla con una nueva planificación.</p><div class="pause-actions"><button class="primary-action compact" id="replace-continue"><span>CONTINUAR PARTIDA GUARDADA</span></button><button class="menu-link" id="replace-new">Empezar una nueva expedición</button></div></dialog>
+  <dialog id="communications-dialog" class="panel communications-panel" aria-labelledby="communications-title"><div class="panel-top"><p class="eyebrow">HORIZONS 1 ↔ TIERRA</p><button class="close-button" data-close aria-label="Cerrar comunicaciones">×</button></div><h2 id="communications-title">Una señal.<br>Millones de <em>kilómetros.</em></h2><div id="communications-content"></div></dialog>
+  <dialog id="star-map-dialog" class="panel star-map-panel" aria-labelledby="star-map-title"><div class="panel-top"><p class="eyebrow">ARCHIVO DE NAVEGACIÓN</p><button class="close-button" data-close aria-label="Cerrar mapa estelar">×</button></div><h2 id="star-map-title">Un universo<br>de <em>posibilidades.</em></h2><div id="star-map-content"></div></dialog>
+  <dialog id="time-lab-dialog" class="panel time-lab-panel" aria-labelledby="time-lab-title"><div class="panel-top"><p class="eyebrow">OBSERVATORIO / EXPERIMENTOS</p><button class="close-button" data-close aria-label="Cerrar laboratorio temporal">×</button></div><h2 id="time-lab-title">El tiempo también<br>tiene <em>perspectiva.</em></h2><div class="lab-tabs" role="tablist" aria-label="Experimentos"><button role="tab" aria-selected="true" id="lab-speed-tab" aria-controls="lab-speed">Movimiento</button><button role="tab" aria-selected="false" tabindex="-1" id="lab-gravity-tab" aria-controls="lab-gravity">Gravedad</button><button role="tab" aria-selected="false" tabindex="-1" id="lab-assist-tab" aria-controls="lab-assist">Asistencia</button></div><div id="lab-speed" role="tabpanel" aria-labelledby="lab-speed-tab"><p class="room-copy">Compara dos eventos de un viaje ideal a velocidad constante. La referencia acumula 10 años; el reloj a bordo acumula un tiempo propio menor.</p><label class="lab-control" for="lab-beta">Velocidad <output id="lab-beta-value">0,80 c</output></label><input class="latency-slider" id="lab-beta" type="range" min="0" max="99" value="80"><div class="clock-comparison"><div><span>REFERENCIA INERCIAL</span><strong>10 <small>años</small></strong><i><b style="width:100%"></b></i></div><div><span>TIEMPO PROPIO A BORDO</span><strong id="lab-proper">6,00 <small>años</small></strong><i><b id="lab-proper-bar"></b></i></div></div><p class="lab-formula">Δτ = Δt √(1 − v²/c²)</p><p class="panel-footnote">Modelo ideal de relatividad especial, sin gravedad ni maniobras de regreso. No representa las velocidades de ECOS DE MARTE.</p></div><div id="lab-gravity" role="tabpanel" aria-labelledby="lab-gravity-tab" hidden><p class="room-copy">Un reloj estático cerca de una masa esférica no rotante acumula menos tiempo que la referencia muy lejana. Explora un modelo ideal fuera del radio de Schwarzschild.</p><label class="lab-control" for="lab-radius">Distancia al centro <output id="lab-radius-value">2 rₛ</output></label><input class="latency-slider" id="lab-radius" type="range" min="2" max="20" value="2"><div class="gravity-well" aria-hidden="true"><span></span><i id="gravity-clock-dot"></i></div><div class="clock-comparison"><div><span>REFERENCIA MUY LEJANA</span><strong>10 <small>años</small></strong></div><div><span>RELOJ ESTÁTICO CERCANO</span><strong id="lab-gravity-proper"></strong></div></div><p class="lab-formula">Δτ = Δt √(1 − rₛ/r)</p><p class="panel-footnote">Modelo de Schwarzschild con r &gt; rₛ. Mantenerse estático exige aceleración. No modela el agujero negro rotante ni las órbitas de Interestelar.</p></div><div id="lab-assist" role="tabpanel" aria-labelledby="lab-assist-tab" hidden><p class="room-copy">En el marco del planeta, la rapidez relativa de entrada y salida se conserva en el encuentro ideal. En el marco solar, puede cambiar al intercambiar energía orbital con el planeta.</p><div class="assist-options"><button class="small-pill selected" id="assist-gain">Ganar rapidez</button><button class="small-pill" id="assist-brake">Reducir rapidez</button></div><label class="lab-control" for="lab-angle">Ángulo de desviación <output id="lab-angle-value">90°</output></label><input class="latency-slider" id="lab-angle" type="range" min="10" max="170" value="90"><svg class="assist-svg" viewBox="0 0 480 180" aria-label="Encuentro gravitatorio ideal"><circle cx="240" cy="90" r="30" fill="#706590"/><path d="M225 90H70" stroke="#91b9d8" stroke-width="2"/><path id="assist-vector" stroke="#d5b4fa" stroke-width="2"/><text x="240" y="150" text-anchor="middle" fill="#ac9bbd" font-size="10">PLANETA EN MOVIMIENTO →</text></svg><div class="assist-results" id="assist-results"></div><p class="panel-footnote">Parámetros de demostración: planeta a 13 km/s y rapidez relativa de 10 km/s. No es una trayectoria de misión ni una fuente de energía ilimitada.</p></div></dialog>
+
+  <dialog id="character-dialog" class="panel character-panel" aria-labelledby="character-title">
+    <div class="panel-top"><p class="eyebrow">TRIPULACIÓN / SELECCIÓN INICIAL</p><button class="close-button" data-close aria-label="Cerrar selección de personaje">×</button></div>
+    <h2 id="character-title">Toda misión comienza<br>con una <em>elección.</em></h2>
+    <p class="panel-description">Dos perspectivas. Un mismo horizonte. Elige a quién quieres llevar en tu próxima expedición.</p>
+    <fieldset class="character-options"><legend class="sr-only">Selecciona un personaje</legend>
+      <label class="character-card"><input type="radio" name="pilot" value="AVI" checked><span class="character-card-content"><span class="character-number">01 / EXPLORACIÓN</span><img class="character-portrait" src="assets/avi-reference.png" alt="AVI: pelaje blanco, cabello lavanda, gafas y sombrero morados, camiseta morada y pantalón negro"><strong>AVI</strong><span class="character-role">Exploración y reconocimiento</span><span class="ability-name">PULSO DE EXPLORACIÓN</span><span class="character-detail">Revelará rutas, puntos de interés y elementos ocultos.</span><span class="selection-indicator">SELECCIONAR <svg class="ui-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></span></span></label>
+      <label class="character-card"><input type="radio" name="pilot" value="MAQUI"><span class="character-card-content"><span class="character-number">02 / ANÁLISIS</span><img class="character-portrait" src="assets/maqui-reference.png" alt="MAQUI: pelaje oscuro y blanco, ojos violetas y pañuelo rojo con emblema blanco"><strong>MAQUI</strong><span class="character-role">Tecnología y diagnóstico</span><span class="ability-name">DIAGNÓSTICO PREDICTIVO</span><span class="character-detail">Analizará sistemas y ayudará a anticipar problemas.</span><span class="selection-indicator">SELECCIONAR <svg class="ui-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></span></span></label>
+    </fieldset>
+    <button class="primary-action compact" id="confirm-pilot"><span>CONFIRMAR PERSONAJE</span><svg class="ui-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button>
+    <p class="panel-footnote">AVI y MAQUI ofrecen herramientas distintas para explorar la misma estación.</p>
+  </dialog>
+
+  <dialog id="science-dialog" class="panel" aria-labelledby="science-title">
+    <div class="panel-top"><p class="eyebrow">CONNECTION SPACE / CONOCIMIENTO</p><button class="close-button" data-close aria-label="Cerrar archivo científico">×</button></div>
+    <h2 id="science-title">Archivo <em>científico.</em></h2><p class="panel-description">Comprender el tiempo también forma parte de la misión.</p>
+    <div class="science-tabs" role="tablist" aria-label="Conceptos científicos"><button role="tab" id="tab-signals" aria-controls="science-signals" aria-selected="true" tabindex="0">Comunicación</button><button role="tab" id="tab-time" aria-controls="science-time" aria-selected="false" tabindex="-1">Tiempo</button><button role="tab" id="tab-mission" aria-controls="science-mission" aria-selected="false" tabindex="-1">Ingeniería</button></div>
+    <section id="science-signals" class="science-content" role="tabpanel" aria-labelledby="tab-signals"><div class="science-graphic" aria-hidden="true"><span>TIERRA</span><i></i><span>HORIZONS 1</span></div><h3>Una señal también necesita viajar.</h3><p>La latencia es el tiempo que tarda una señal en llegar. En un modelo de distancia fija y propagación en el vacío, se calcula como distancia dividida entre la velocidad de la luz.</p><div class="equation">t = d / c <small>Tiempo de propagación · No es dilatación temporal</small></div><p>Pedir instrucciones implica un trayecto de ida, el tiempo de respuesta y un trayecto de vuelta. Por eso una misión lejana necesita capacidad para decidir a bordo.</p><a class="source-link" href="https://www.nasa.gov/wp-content/uploads/2024/01/mars-communications-disruption-and-delay.pdf" target="_blank" rel="noopener noreferrer">Consultar recurso de NASA <svg class="ui-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a></section>
+    <section id="science-time" class="science-content" role="tabpanel" aria-labelledby="tab-time" hidden><h3>Distintos conceptos, distintas preguntas.</h3><dl class="concept-list"><div><dt>Tiempo de viaje</dt><dd>¿Cuánto dura el recorrido de la nave, en la referencia elegida?</dd></div><div><dt>Tiempo propio</dt><dd>¿Cuánto tiempo acumula el reloj del viajero?</dd></div><div><dt>Desfase entre relojes</dt><dd>¿Qué diferencia muestran al compararlos mediante un procedimiento definido?</dd></div><div><dt>Dilatación temporal</dt><dd>El movimiento y las condiciones gravitatorias pueden hacer que relojes inicialmente sincronizados acumulen tiempos distintos.</dd></div></dl><p class="science-callout">Acelerar una animación solo cambia cómo presentamos la simulación. No produce dilatación temporal.</p><a class="source-link" href="https://www.einstein-online.info/en/explandict/time-dilation/" target="_blank" rel="noopener noreferrer">Consultar Einstein Online <svg class="ui-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a></section>
+    <section id="science-mission" class="science-content" role="tabpanel" aria-labelledby="tab-mission" hidden><h3>Cada elección afecta al conjunto.</h3><p>Un instrumento puede aumentar las oportunidades científicas y, al mismo tiempo, aumentar la masa, la potencia requerida y la cantidad de datos que hay que transmitir.</p><dl class="concept-list"><div><dt>Masa · kg</dt><dd>Una restricción de diseño y de capacidad de lanzamiento.</dd></div><div><dt>Potencia · W</dt><dd>Ritmo al que un sistema consume o entrega energía.</dd></div><div><dt>Energía · Wh o J</dt><dd>Cantidad disponible o consumida durante un intervalo.</dd></div></dl><p class="science-callout">La misión se evalúa como un sistema: ciencia, recursos, comunicaciones y tiempo.</p><a class="source-link" href="https://science.nasa.gov/learn/basics-of-space-flight/" target="_blank" rel="noopener noreferrer">Explorar fundamentos de vuelo espacial <svg class="ui-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a></section>
+  </dialog>
+
+  <dialog id="settings-dialog" class="panel settings-panel" aria-labelledby="settings-title">
+    <header class="settings-heading">
+      <div class="panel-top">
+        <p class="eyebrow">CONFIGURACIÓN</p>
+        <button class="close-button" data-close aria-label="Cerrar configuración">×</button>
+      </div>
+      <h2 id="settings-title">A tu <em>ritmo.</em></h2>
+      <div class="settings-tabs" role="tablist" aria-label="Categorías de ajustes">
+        <button id="settings-audio-tab" role="tab" aria-controls="settings-audio" aria-selected="true">Audio</button>
+        <button id="settings-display-tab" role="tab" aria-controls="settings-display" aria-selected="false" tabindex="-1">Pantalla</button>
+        <button id="settings-game-tab" role="tab" aria-controls="settings-game" aria-selected="false" tabindex="-1">Juego</button>
+      </div>
+    </header>
+    <div class="settings-content">
+      <section id="settings-audio" role="tabpanel" aria-labelledby="settings-audio-tab">
+        <div class="settings-option"><label for="sound-toggle"><strong>Activar sonido</strong><span>Se activa al empezar a jugar o desde aquí.</span></label><input class="switch" type="checkbox" id="sound-toggle"></div>
+        <div class="settings-option"><label for="volume"><strong>Volumen general</strong></label><div class="settings-range"><input id="volume" type="range" min="0" max="100" value="35"><output id="volume-value" for="volume">35%</output></div></div>
+        <div class="settings-option"><label for="music-toggle"><strong>Música de fondo</strong><span>Horizonte estelar · Banda sonora original.</span></label><input class="switch" type="checkbox" id="music-toggle" checked></div>
+        <div class="settings-option"><label for="music-volume"><strong>Volumen de música</strong></label><div class="settings-range"><input id="music-volume" type="range" min="0" max="100" value="65"><output id="music-volume-value" for="music-volume">65%</output></div></div>
+        <div class="settings-option"><label for="ambient-toggle"><strong>Sonido ambiental</strong><span>Ambiente de la estación y el vuelo.</span></label><input class="switch" type="checkbox" id="ambient-toggle" checked></div>
+        <div class="settings-option"><label for="ambient-volume"><strong>Volumen ambiental</strong></label><div class="settings-range"><input id="ambient-volume" type="range" min="0" max="100" value="100"><output id="ambient-volume-value" for="ambient-volume">100%</output></div></div>
+        <div class="settings-option"><label for="effects-toggle"><strong>Efectos sonoros</strong><span>Despegues, escaneos y la señal de Faro 7.</span></label><input class="switch" type="checkbox" id="effects-toggle" checked></div>
+        <div class="settings-option"><label for="effects-volume"><strong>Volumen de efectos</strong></label><div class="settings-range"><input id="effects-volume" type="range" min="0" max="100" value="100"><output id="effects-volume-value" for="effects-volume">100%</output></div></div>
+      </section>
+      <section id="settings-display" role="tabpanel" aria-labelledby="settings-display-tab" hidden>
+        <div class="settings-option" id="fullscreen-on-play-option"><label for="fullscreen-on-play"><strong>Pantalla completa al jugar</strong></label><input class="switch" type="checkbox" id="fullscreen-on-play"></div>
+        <div class="settings-option"><div class="fullscreen-label"><strong>Pantalla completa</strong><p id="fullscreen-info">Oculta la barra del navegador. Pulsa Esc para volver.</p></div><button class="room-action-secondary" id="settings-fullscreen" data-fullscreen aria-pressed="false" aria-describedby="fullscreen-info">Activar</button></div>
+        <div class="settings-option"><label for="motion-toggle"><strong>Movimiento reducido</strong><span>Reduce transiciones, efectos ambientales y parallax.</span></label><input class="switch" type="checkbox" id="motion-toggle"></div>
+        <div class="settings-option"><label for="large-text-toggle"><strong>Texto más grande</strong><span>Amplía diálogos, lecturas y etiquetas de la misión.</span></label><input class="switch" type="checkbox" id="large-text-toggle"></div>
+        <div class="settings-option"><label for="contrast-toggle"><strong>Más contraste</strong><span>Realza el texto, los bordes de los controles y los indicadores.</span></label><input class="switch" type="checkbox" id="contrast-toggle"></div>
+      </section>
+      <section id="settings-game" role="tabpanel" aria-labelledby="settings-game-tab" hidden>
+        <div class="settings-option"><label for="touch-controls"><strong>Botones de dirección</strong><span>Elige cuándo mostrar los controles en pantalla.</span></label><select id="touch-controls"><option value="auto">Automático</option><option value="visible">Siempre visibles</option><option value="keyboard">Solo teclado</option></select></div>
+        <div class="settings-option"><label for="flight-speed-setting"><strong>Velocidad de viaje en Marte</strong><span>Controla la reproducción del viaje en Ecos de Marte.</span></label><select id="flight-speed-setting"><option value="1">1× · Normal</option><option value="3">3× · Rápida</option><option value="9">9× · Muy rápida</option></select></div>
+        <details class="settings-help">
+          <summary>Guía de controles</summary>
+          <dl>
+            <div><dt>Menús</dt><dd><kbd>Tab</kbd> para avanzar, <kbd>Enter</kbd> para elegir y <kbd>Esc</kbd> para cerrar.</dd></div>
+            <div><dt>Estación y rover</dt><dd><kbd>A</kbd> <kbd>D</kbd> o flechas para moverte, <kbd>E</kbd> para interactuar y <kbd>Q</kbd> para la habilidad.</dd></div>
+            <div><dt>Campaña</dt><dd><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> o flechas para pilotar, <kbd>E</kbd> para escanear y <kbd>Q</kbd> para la habilidad.</dd></div>
+          </dl>
+        </details>
+      </section>
+    </div>
+    <footer class="settings-footer">
+      <button type="button" id="settings-reset">Restablecer ajustes</button>
+      <p role="status" id="settings-status">Los ajustes se guardan en este navegador.</p>
+    </footer>
+  </dialog>
+
+  <dialog id="credits-dialog" class="panel" aria-labelledby="credits-title"><div class="panel-top"><p class="eyebrow">EL ORIGEN DE LA MISIÓN</p><button class="close-button" data-close aria-label="Cerrar créditos">×</button></div><h2 id="credits-title">Ideas que se<br>vuelven <em>horizontes.</em></h2><p class="credits-brand">AVI CONNECTION</p><p class="panel-description">CONECTANDO IDEAS, CREANDO REALIDADES</p><div class="credits-grid"><div><h3>Proyecto</h3><p>AVI HORIZONS<br>Aventura espacial 2D de exploración, ciencia y narrativa.</p></div><div><h3>Dirección e identidad</h3><p>Gustavo Vargas Lara<br>Logo de doce módulos huecos y trazos finos aprobado para AVI HORIZONS.</p></div></div><div class="credits-note"><h3>Alcance de esta versión</h3><p>Entrada, menú, selección y CONNECTION SPACE explorable. Incluye estación explorable, planificación, lanzamiento, viaje, decisiones, descenso, exploración de Marte e informe final. Guardado local y repetición de la misión. Conversaciones con la tripulación, expedición detallada de Marte y campaña de 25 niveles jugables con atlas ilustrado.</p><h3>Herramientas y recursos</h3><p>Diseño y desarrollo asistidos con ChatGPT. Logo trabajado mediante generación de imágenes con IA. Fondo orbital y retratos de Lyra, Teo y Nova generados con IA. Diagramas dibujados con SVG y Canvas. Fondos interior y marciano, y adaptaciones 2D de AVI y MAQUI generados con IA a partir de las referencias visuales proporcionadas por la dirección del proyecto. Ambiente sintetizado y banda sonora original Horizonte estelar.</p><h3>Imágenes astronómicas</h3><p>Cada ficha del atlas identifica observaciones, composiciones o ilustraciones y enlaza la fuente y sus créditos. Los escenarios del juego son recreaciones artísticas.</p><h3>Referencias científicas</h3><p><a href="https://www.nasa.gov/wp-content/uploads/2024/01/mars-communications-disruption-and-delay.pdf" target="_blank" rel="noopener noreferrer">NASA — comunicaciones marcianas ↗</a><br><a href="https://www.einstein-online.info/en/explandict/time-dilation/" target="_blank" rel="noopener noreferrer">Einstein Online — dilatación temporal ↗</a><br><a href="https://science.nasa.gov/learn/basics-of-space-flight/" target="_blank" rel="noopener noreferrer">NASA — fundamentos de vuelo espacial ↗</a></p><p class="panel-footnote">Prototipo independiente de AVI CONNECTION. Esta versión no afirma afiliación ni aprobación de NASA.</p></div></dialog>
+  <dialog id="crew-dialog" class="panel crew-panel" aria-labelledby="crew-title"><div class="panel-top"><p class="eyebrow">TRIPULACIÓN / CANAL LOCAL</p><button class="close-button" data-close aria-label="Cerrar conversación">×</button></div><div id="crew-content"></div></dialog>
+<dialog id="atlas-dialog" class="panel atlas-panel" aria-labelledby="atlas-title"><div class="panel-top"><p class="eyebrow">ARCHIVO DE EXPLORACIÓN / 05 MISIONES</p><button class="close-button" data-close aria-label="Cerrar atlas">×</button></div><h2 id="atlas-title">El atlas de los <em>horizontes.</em></h2><p class="panel-description">Consulta las imágenes, el contexto científico y las fuentes de los 25 destinos de la campaña.</p><nav id="atlas-missions" class="atlas-missions" aria-label="Elegir misión"></nav><div id="atlas-content"></div></dialog>
+<div class="toast" id="toast" role="status" hidden></div>
+  <noscript><div class="noscript">AVI HORIZONS necesita JavaScript para mostrar la entrada y los controles.</div></noscript>
+
+  <section class="campaign-screen" id="campaign-screen" aria-labelledby="campaign-view-title" hidden>
+    <header class="campaign-header">
+      <div class="campaign-header-actions">
+        <button class="campaign-header-brand" data-action="menu" aria-label="Volver al menú principal">
+          <img class="logo" src="assets/avi-horizons-logo.png" alt=""><strong>AVI HORIZONS</strong>
+        </button>
+        <span class="campaign-header-location" id="campaign-location">Atlas de misiones</span>
+      </div>
+      <div class="campaign-header-actions">
+        <span id="campaign-progress">0 / 25 niveles</span>
+        <button class="sector-button small" data-logbook>Bitácora</button>
+        <button class="sector-button small" data-dialog="settings-dialog" aria-label="Configuración de la campaña">Ajustes</button>
+        <div class="campaign-user"><img id="campaign-pilot-image" alt=""><b id="campaign-pilot">AVI</b></div>
+      </div>
+    </header>
+    <div class="campaign-main" id="campaign-content"></div>
+  </section>
+  <dialog id="campaign-pause" class="panel small-panel" aria-labelledby="campaign-pause-title">
+    <div class="panel-top"><p class="eyebrow">HORIZONS 1</p><button class="close-button" data-close aria-label="Continuar vuelo">×</button></div>
+    <h2 id="campaign-pause-title">Vuelo en pausa</h2>
+    <p class="panel-description">La nave y el tiempo de vuelo quedan detenidos.</p>
+    <div class="pause-actions">
+      <button class="primary-action compact" id="campaign-resume-flight">CONTINUAR VUELO →</button>
+      <button class="menu-link" id="campaign-flight-settings">Configuración</button>
+      <button class="menu-link" id="campaign-save-map">Guardar y volver a los destinos</button>
+    </div>
+  </dialog>
+
+
+  <dialog id="logbook-dialog" class="panel logbook-panel" aria-labelledby="logbook-title">
+    <div class="panel-top">
+      <p class="eyebrow">HORIZONS 1</p>
+      <button class="close-button" data-close aria-label="Cerrar bitácora">×</button>
+    </div>
+    <h2 id="logbook-title">Bitácora de misión</h2>
+    <p class="panel-description">Consulta tus vuelos, decisiones y resultados en este navegador.</p>
+    <div class="logbook-toolbar">
+      <label for="logbook-filter">Mostrar</label>
+      <select id="logbook-filter">
+        <option value="all">Todas las misiones</option>
+        <option value="mars">Expedición a Marte</option>
+        <option value="campaign">Campaña de 25 niveles</option>
+        <option value="activity">Actividad de la estación</option>
+      </select>
+      <div class="logbook-export">
+        <button class="room-action-secondary" id="logbook-csv">Exportar misiones CSV</button>
+        <button class="room-action-secondary" id="logbook-json">Exportar bitácora JSON</button>
+      </div>
+    </div>
+    <p id="logbook-status" class="panel-footnote" role="status"></p>
+    <div class="logbook-columns">
+      <div id="logbook-content" aria-label="Historial"></div>
+      <section id="logbook-detail" aria-label="Detalle de la misión" hidden></section>
+    </div>
+  </dialog>
+
+  <dialog id="alex-dialog" class="panel alex-dialog" aria-labelledby="alex-title">
+    <div class="panel-top"><p class="eyebrow">CONNECTION SPACE / CANAL DE ALEX</p><button class="close-button" data-close aria-label="Cerrar canal de Alex">×</button></div>
+    <div class="alex-brief">
+      <img class="alex-portrait" id="alex-portrait" src="assets/alex-welcome.webp" alt="Alex, el bisonte científico de la expedición" width="560" height="560">
+      <div>
+        <p class="eyebrow">ALEX · ASISTENTE CIENTÍFICO</p>
+        <h2 id="alex-title" tabindex="-1"></h2>
+        <p id="alex-copy"></p>
+        <button class="primary-action compact" id="alex-next">Escuchar la señal</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="faro-demo-dialog" class="panel faro-panel" aria-labelledby="faro-demo-title">
+    <header class="panel-top"><p class="eyebrow">ECOS DE MARTE / DEMOSTRACIÓN</p><button class="close-button" data-close aria-label="Cerrar demo de Faro 7">×</button></header>
+    <h2 id="faro-demo-title" tabindex="-1">La señal de Faro 7</h2>
+    <div id="faro-demo-content"></div>
+  </dialog>
+
+  <script src="app.bundle.js"></script>
+</body>
+</html>

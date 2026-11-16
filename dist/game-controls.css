@@ -1,0 +1,96 @@
+:root {
+  --control-fill: #161d30e8;
+  --control-edge: #b8b0df55;
+  --control-hover: #242a42;
+  --control-ink: #f1edf9;
+  --control-accent: #ddcbfb;
+}
+
+button:is(.primary-action, .room-action-secondary, .console-action, .small-pill, .decision-card, .close-button) {
+  border-radius: 8px;
+}
+button:is(.primary-action, .room-action-secondary, .console-action, .small-pill) {
+  font-family: var(--sans);
+  letter-spacing: .02em;
+  line-height: 1.35;
+}
+button.primary-action {
+  background: var(--control-accent);
+  color: #241b33;
+  box-shadow: none;
+}
+button.primary-action:hover:not(:disabled) {
+  background: #f1e6ff;
+  box-shadow: none;
+  transform: none;
+}
+button:is(.room-action-secondary, .console-action, .small-pill, .decision-card),
+#main .home-secondary, .campaign-screen button.sector-button:not(.primary) {
+  color: var(--control-ink);
+  background: var(--control-fill);
+  border: 1px solid var(--control-edge);
+}
+button:is(.room-action-secondary, .console-action, .small-pill, .decision-card):hover:not(:disabled),
+#main .home-secondary:hover, .campaign-screen button.sector-button:not(:disabled):hover:not(.primary) {
+  color: #fff;
+  background: var(--control-hover);
+  border-color: #d3bcf5b3;
+}
+#main .home-secondary { border-radius: 7px; min-height: 43px; padding-inline: 12px; }
+#main .home-start { min-height: 61px; border-radius: 8px; }
+.campaign-screen button.sector-button:hover:not(:disabled) { transform: none; }
+.campaign-screen button.sector-button.primary:hover:not(:disabled) { filter: brightness(1.1); }
+button:is(.room-action-secondary, .console-action, .small-pill) { min-height: 36px; }
+button:is(.room-action-secondary, .console-action, .small-pill, .decision-card):disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+button:is(.home-secondary, .sector-button, .room-action-secondary, .console-action, .small-pill, .decision-card, .icon-button, .primary-action):focus-visible {
+  outline: 2px solid #eedcff;
+  outline-offset: 3px;
+}
+button:is(.home-secondary, .sector-button, .room-action-secondary, .console-action, .small-pill, .decision-card):active:not(:disabled) {
+  box-shadow: inset 0 0 0 1px #e0c9faab;
+}
+button.close-button:hover { background: var(--control-hover); color: #fff; }
+body[data-high-contrast="true"] { --control-edge: #d1b7f5; --control-ink: #fff; }
+body[data-large-text="true"] button:is(.room-action-secondary, .console-action, .small-pill) { font-size: max(14px, 1em); }
+
+.preloader .intro-enter {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: clamp(14px, 4vh, 32px);
+  min-height: 43px;
+  color: #21182f;
+  background: var(--control-accent);
+  border: 1px solid #eee1ff;
+  border-radius: 8px;
+  font: 650 13px/1.25 var(--sans);
+  letter-spacing: .04em;
+}
+.preloader .intro-enter .ui-arrow { width: 16px; height: 16px; }
+.preloader .intro-muted { margin-top: 10px; padding: 8px; font: 13px/1.4 var(--sans); }
+.intro-fullscreen {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #dacfea;
+  font-size: 13px;
+  padding: 8px;
+}
+.intro-fullscreen input { margin: 0; width: 16px; height: 16px; accent-color: var(--control-accent); }
+.preloader:has(#enter-button[hidden]) .intro-fullscreen { visibility: hidden; }
+#home-fullscreen .shrink-icon,
+#home-fullscreen[aria-pressed="true"] .expand-icon { display: none; }
+#home-fullscreen[aria-pressed="true"] .shrink-icon { display: initial; }
+#home-fullscreen[aria-pressed="true"] { border-color: #d3baf4a3; }
+.fullscreen-label { font-size: 13px; line-height: 1.4; }
+.fullscreen-label p { margin: 4px 0 0; color: #bfb3cd; font-size: 12px; }
+body[data-large-text="true"] .fullscreen-label :is(strong, p) { font-size: 16px; }
+body[data-high-contrast="true"] .fullscreen-label p { color: #fff; }
+@media (max-height: 480px) {
+  .preloader .intro-logo { width: 64px; height: 64px; }
+  .preloader .intro-brand { margin: 10px 0 14px; }
+}

@@ -1,0 +1,134 @@
+#main { padding: 0 clamp(24px, 6vw, 100px); }
+.home-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 8px 0;
+}
+.home-toolbar .icon-button {
+  width: 40px;
+  height: 40px;
+  background: #0d1422be;
+  border-color: #c6cfeb44;
+}
+.home-menu {
+  flex: 1;
+  min-width: 0;
+  width: min(100%, 460px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(28px, 7vh, 94px) 0 36px;
+}
+.home-logo { width: 51px; height: 51px; object-fit: contain; margin-bottom: 18px; }
+.home-menu h1 {
+  margin: 0 0 31px;
+  color: #f5f5fa;
+  font: 600 clamp(30px, 5vw, 61px)/1.1 var(--sans);
+  letter-spacing: -.035em;
+}
+.home-actions {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 300px);
+  gap: 6px;
+}
+#main .home-start {
+  min-height: 62px;
+  padding: 12px 16px;
+  background: #e9ddfe;
+  border: 1px solid #eee5ff;
+  border-radius: 7px;
+  color: #241a31;
+  box-shadow: none;
+  font: 650 16px/1.25 var(--sans);
+  letter-spacing: 0;
+}
+#main .home-start:hover { background: #f3eaff; box-shadow: none; transform: none; }
+.home-start small {
+  display: block;
+  margin: 4px 0 0;
+  font: 400 12px/1.3 var(--sans);
+  letter-spacing: 0;
+  opacity: .85;
+}
+.home-start .ui-arrow { width: 17px; height: 17px; }
+.home-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 42px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: #eeeaf6;
+  font-size: 14px;
+  text-align: left;
+}
+.home-secondary:hover, .home-settings:hover, .home-more summary:hover, .home-utilities .game-download:hover {
+  color: #fff;
+  background-color: #b4bdde19;
+}
+.home-secondary small { color: #d6cbe8; font-size: 11px; }
+.home-utilities {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+  width: min(100%, 300px);
+  margin-top: 14px;
+  color: #d2cbdc;
+}
+.home-settings, .home-more summary, .home-utilities .game-download {
+  min-height: 40px;
+  padding: 10px;
+  border-radius: 5px;
+  font: 400 13px/20px var(--sans);
+}
+.home-settings { background: #0d1422ac; border: 1px solid #c6cfeb44; color: #eeeaf6; }
+.home-utilities .game-download {
+  display: inline-block;
+  text-decoration: none;
+  border: 0;
+  margin: 0;
+  color: inherit;
+}
+.home-more summary { cursor: pointer; }
+.home-more-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 5px 0 0; gap: 4px; }
+.home-more:not([open]) { flex: 0 0 auto; }
+.home-more[open] { flex: 0 0 100%; }
+.home-more-items button {
+  min-height: 39px;
+  padding: 8px;
+  border: 1px solid #b6a2d14a;
+  border-radius: 5px;
+  color: #e4dff0;
+  background: #0c1222cf;
+  font-size: 12px;
+  text-align: left;
+}
+.home-more-items button:hover { background: #251e35; }
+.home-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 6px 0 16px;
+  min-height: 50px;
+}
+.home-publisher { width: 26px; height: 26px; opacity: .9; }
+body[data-large-text="true"] :is(.home-secondary, .home-secondary small, .home-more summary, .home-more-items button, .home-settings, .home-utilities .game-download) { font-size: 16px; }
+body[data-high-contrast="true"] :is(.home-secondary, .home-secondary small, .home-more summary, .home-more-items button, .home-settings, .home-utilities .game-download) { color: #fff; }
+body[data-high-contrast="true"] .home-more-items button { border-color: var(--border); }
+@media (max-width: 650px) {
+  #main .universe .station-art { height: 100%; min-height: 0; object-position: 63% center; }
+  #main .universe::after {
+    background: linear-gradient(90deg, #090c17f0, #090c17ab 62%, #090c1760),
+      linear-gradient(0deg, #090c17d6, transparent 50%);
+  }
+  .home-toolbar { min-height: 55px; }
+  .home-menu { padding-top: 36px; padding-bottom: 27px; }
+  .home-logo { width: 42px; height: 42px; margin-bottom: 14px; }
+  .home-menu h1 { margin-bottom: 25px; font-size: clamp(28px, 9vw, 48px); }
+}

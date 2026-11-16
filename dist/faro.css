@@ -1,0 +1,121 @@
+.preloader {
+  background: radial-gradient(ellipse at center, #08071252, #08071214), url("assets/interstellar.webp") 64% center / cover #080910;
+  transition: none;
+}
+
+.preloader .intro-logo {
+  width: clamp(100px, 16vw, 180px);
+  height: clamp(100px, 16vw, 180px);
+  filter: drop-shadow(0 0 24px #cbb4ff77);
+  animation: intro-clockwise 5s linear both;
+}
+
+@keyframes intro-clockwise {
+  to { transform: rotate(360deg); }
+}
+
+.home-secondary.faro-entry {
+  border-color: #8ba5d981;
+  background: #253555b8;
+}
+
+.home-secondary.faro-entry:hover { background: #324a72; }
+.faro-entry small { color: #bddeff; }
+
+@media (max-height: 740px) {
+  .home-menu { padding-top: 16px; padding-bottom: 12px; }
+  .home-logo { width: 43px; height: 43px; margin-bottom: 10px; }
+  .home-menu h1 { margin-bottom: 18px; }
+  .home-utilities { margin-top: 5px; }
+  .home-footer { min-height: 38px; }
+}
+
+#desktop-only { width: 500px; }
+#desktop-only > :last-child { margin-bottom: 0; }
+
+.bright-hangar {
+  border-color: #91b9d9;
+  color: #152a43;
+  background: linear-gradient(140deg, #f7fcff, #dceffc 56%, #ece9ff);
+}
+
+.bright-hangar .eyebrow, .bright-hangar .room-copy, .bright-hangar .panel-footnote { color: #314f6c !important; }
+.bright-hangar .close-button { color: #263e57; border-color: #879db5; }
+.bright-hangar .equipment-option,
+.bright-hangar .ship-metric {
+  background: #ffffffcc;
+  border-color: #8daec5;
+}
+.bright-hangar .ship-metric *, .bright-hangar .equipment-option * { color: #24435e; }
+.bright-hangar .equipment-option:has(input:checked) { background: #e4f8ff; border-color: #3783a7; }
+.bright-hangar .ship-metric.over *, .bright-hangar .ship-feedback.invalid { color: #992143; }
+.bright-hangar .ship-feedback { color: #0b615b; }
+.bright-hangar .primary-action { color: #fff; background: #234479; border-color: #234479; }
+.bright-hangar .primary-action:hover { background: #32588f; }
+.bright-hangar .hub-plan-launch { color: #133c6e; background: #e1f3ff; border-color: #6295bd; }
+
+.fleet-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
+.fleet-card {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid #719daed6;
+  border-radius: 12px;
+  background: radial-gradient(ellipse at 50% 12%, #ffffff 0, #a7daee 90%);
+}
+.fleet-shuttle { background: radial-gradient(ellipse at 50% 14%, #fff9ed, #ffc38b); border-color: #bb895e; }
+.fleet-card img { width: 100%; height: clamp(105px, 16vh, 159px); display: block; object-fit: contain; padding: 8px 15px; filter: drop-shadow(0 9px 7px #1a344751); }
+.fleet-card > div { padding: 11px 13px; background: #ffffffc2; }
+.fleet-card strong { display: block; font: 700 16px/1.3 var(--sans); }
+.fleet-card span { display: block; font: 600 12px/1.4 var(--sans); }
+.fleet-card p { margin: 4px 0 0; font-size: 12px; line-height: 1.4; }
+
+.descent-ship { width: 100%; height: auto; display: block; filter: drop-shadow(0 5px 10px #21162460); }
+.flight-craft.fleet-flight-craft { inset: -5px; width: calc(100% + 10px); height: calc(100% + 10px); object-fit: contain; clip-path: none; background: transparent; transform: rotate(19deg); }
+#alex-dialog[data-alex-pose="portrait"] #alex-portrait { object-position: center 24%; }
+#alex-dialog[data-alex-pose="explain"] #alex-portrait, .alex-line .alex-portrait { animation: alex-gesture 360ms ease-out both; }
+.character-card:has(input:checked) .character-portrait { transform-origin: center bottom; animation: pilot-greeting 620ms ease-in-out both; }
+.pulse-active .rover-cabin img { animation: alex-gesture 360ms ease-out both; }
+
+@keyframes alex-gesture {
+  from { opacity: .6; transform: translateY(6px) scale(.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes pilot-greeting {
+  36% { transform: translateY(-6px) rotate(-2deg); }
+  73% { transform: translateY(-2px) rotate(1deg); }
+}
+
+.faro-panel {
+  width: 900px;
+  border-color: #88afd16e;
+  background: radial-gradient(ellipse at 93% -10%, #223758, transparent 61%), #111320;
+}
+.faro-grid { display: grid; grid-template-columns: minmax(0, 1.07fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+.faro-actions .alex-line { min-height: 84px; margin: 0 0 13px; background: #252c49aa; }
+.faro-actions .alex-portrait { width: 56px; flex-basis: 56px; }
+.faro-window { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 11px; color: #cbd9ef; font-size: 13px; }
+.faro-window strong { color: #ededff; font: 600 18px var(--sans); }
+.faro-relay-label { display: block; font-size: 13px; color: #dfe8fd; margin-bottom: 8px; }
+.faro-grid select { display: block; width: 100%; min-height: 42px; padding: 6px 9px; color: #fff; background: #283449; border: 1px solid #768db8; border-radius: 5px; font: 13px var(--sans); }
+.faro-grid .relay-card { margin: 10px 0 0; }
+.faro-decisions { display: grid; gap: 8px; }
+.faro-decisions button { width: 100%; min-height: 47px; text-align: left; }
+.faro-decisions button span { display: block; margin-top: 3px; color: #c6d5ee; font: 11px var(--sans); }
+.faro-result { background: #18394c; border: 1px solid #72b3c489; border-radius: 6px; padding: 9px 12px; margin-bottom: 9px; }
+.faro-result p { padding: 0; margin: 4px 0 0; font-size: 12px; color: #d6ecf7; }
+.faro-comparison { width: 100%; border-collapse: collapse; font-size: 12px; color: #e0e7f5; margin: 19px 0 10px; text-align: left; }
+.faro-comparison caption { text-align: left; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+.faro-comparison :is(th, td) { padding: 8px 6px; border-bottom: 1px solid #9ab1db47; }
+.faro-comparison thead { color: #bacbe7; }
+.faro-note { color: #b9c4da; font-size: 12px; line-height: 1.5; margin-bottom: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader .intro-logo, .alex-line .alex-portrait, #alex-dialog[data-alex-pose="explain"] #alex-portrait, .character-card:has(input:checked) .character-portrait, .pressurized-rover .rover-cabin img { animation: none; }
+}
+body[data-reduced-motion="true"] :is(.intro-logo, .alex-portrait, .character-portrait, .rover-cabin img) { animation: none !important; }
+
+.bright-hangar .room-contact { border-color: #83adc9; background: #ffffffb3; }
+.bright-hangar .room-contact:hover { background: #effaff; }
+.bright-hangar .room-contact :is(strong, small) { color: #24435e; }

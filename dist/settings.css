@@ -1,0 +1,82 @@
+.settings-panel {
+  --settings-pad: clamp(17px, 4vw, 36px);
+  width: min(680px, calc(100vw - 28px));
+  max-width: none;
+  max-height: min(720px, calc(100dvh - 28px));
+  padding: 0;
+  overflow: hidden;
+}
+.settings-panel[open] { display: flex; flex-direction: column; }
+.settings-heading { flex: none; padding: 17px var(--settings-pad) 0; }
+.settings-heading .panel-top { margin-bottom: 8px; }
+.settings-heading h2 { margin: 0 0 18px; font-size: clamp(32px, 6vw, 46px); }
+.settings-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.settings-tabs button {
+  min-height: 40px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 13px;
+  color: #cdc1df;
+}
+.settings-tabs button:hover { background: #20192d; }
+.settings-tabs button[aria-selected="true"] { border-color: #ba97ec70; background: #302344; color: #f5eaff; }
+.settings-content { min-height: 0; overflow-y: auto; padding: 4px var(--settings-pad); scrollbar-width: thin; }
+.settings-option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  min-height: 54px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.settings-option label { display: grid; gap: 4px; font-size: 13px; line-height: 1.4; color: #f2ebfc; }
+.settings-option label span, .settings-help dd { color: #bfb3cd; font-size: 12px; line-height: 1.45; }
+.settings-range { display: grid; grid-template-columns: minmax(78px, 125px) 4ch; align-items: center; gap: 8px; }
+.settings-range input { width: 100%; min-width: 0; accent-color: var(--lavender); }
+.settings-range output { color: #eddefe; text-align: right; font: 11px var(--mono); }
+.settings-option select { max-width: min(42vw, 175px); background: #21192d; color: #f1e5ff; padding: 8px; border: 1px solid #906eb575; border-radius: 5px; font: 12px var(--sans); }
+.settings-help { margin: 10px 0; font-size: 13px; }
+.settings-help summary { color: #e1c9ff; cursor: pointer; padding: 7px 0; }
+.settings-help dl { display: grid; gap: 9px; padding: 0 0 5px; }
+.settings-help dt { color: #f0e9fb; font-weight: 700; }
+.settings-help dd { margin: 4px 0 0; }
+.settings-help kbd { color: #fff; border: 1px solid var(--border); border-radius: 4px; padding: 1px 3px; }
+.settings-footer { flex: none; display: flex; gap: 8px 14px; align-items: center; flex-wrap: wrap; padding: 12px var(--settings-pad); border-top: 1px solid var(--border); }
+.settings-footer button { min-height: 34px; padding: 6px 9px; border: 1px solid #a587ce7d; border-radius: 5px; color: #f1dfff; font-size: 12px; }
+.settings-footer button:hover { background: #302344; }
+.settings-footer p { color: #bdb0cb; font-size: 11px; margin: 0; line-height: 1.45; }
+.settings-panel :is(button, summary, input, select):focus-visible { outline: 2px solid var(--lavender); outline-offset: 2px; }
+body[data-large-text="true"] :is(.settings-option label, .settings-option label span, .settings-help, .settings-help dd, .settings-tabs button, .settings-footer button, .settings-footer p, .panel-description, .panel-footnote, .room-copy, .expedition-content .lead-copy, .microcopy, .flight-hint, .world-status, .logbook-events p, .console-reading, .menu-link, .story-campaign-line, .plan-fields label, .logbook-metrics dd, .hub-objective p) {
+  font-size: max(14px, 1rem);
+}
+body[data-large-text="true"] :is(.expedition-resources, .flight-readouts, .plan-totals) :is(span, small, strong) { font-size: 12px; }
+body[data-large-text="true"] .settings-option :is(select, output) { font-size: 14px; }
+body[data-high-contrast="true"] { --muted: #ede5fa; --lavender: #e0caff; --border: #b8a0d8; }
+body[data-high-contrast="true"] :is(.panel, .flight-console, .console-body, .hub-footer, .expedition-header, .expedition-resources) {
+  --space-muted: #f5eefc;
+  --space-edge: #b8a0d8;
+  background-color: #0d0a16;
+}
+body[data-high-contrast="true"] :is(.panel-description, .panel-footnote, .room-copy, .lead-copy, .microcopy, .settings-option label span, .settings-footer p, .settings-help dd,
+  .expedition-resources span, .expedition-resources small, .flight-readouts span, .plan-totals span, .expedition-tools button, .plan-fields label,
+  .logbook-metrics dt, .logbook-events small, .logbook-events p, .logbook-list small, .motto, .menu-link, .hub-objective p, .hub-controls) {
+  color: #f6eefc;
+}
+body[data-high-contrast="true"] :is(.switch, .settings-option select, .small-pill, .console-action, .panel, .close-button, .logbook-list button, .settings-tabs button[aria-selected="true"]) { border-color: #cfb6f5; }
+body[data-high-contrast="true"] :is(.expedition-resources b, .status-dot, .flight-progress-fill) { background: #eadcff; }
+body[data-touch-controls="visible"] .hub-mobile-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 9px 18px;
+  background: #0b0a11;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+body[data-touch-controls="keyboard"] :is(.hub-mobile-controls, .direction-pad, #rover-left, #rover-right) { display: none; }
+@media (max-width: 430px) {
+  .settings-option { gap: 8px; }
+  .settings-range { grid-template-columns: minmax(56px, 84px) 4ch; gap: 4px; }
+}

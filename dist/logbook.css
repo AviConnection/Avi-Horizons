@@ -1,0 +1,45 @@
+.logbook-panel { width: min(1020px, 94vw); max-width: 1020px; }
+.logbook-toolbar, .logbook-export { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+.logbook-toolbar { margin-top: 18px; }
+.logbook-toolbar label { color: #dbcef0; font-size: 13px; }
+.logbook-toolbar select {
+  padding: 9px 12px; color: #f4eeff; border: 1px solid #ba9edf55;
+  border-radius: 7px; background: #181324; color-scheme: dark;
+}
+.logbook-export { margin-left: auto; }
+.logbook-columns { display: grid; grid-template-columns: minmax(240px, 1fr) minmax(0, 1.35fr); gap: 18px; }
+.logbook-columns:has(#logbook-detail[hidden]) { grid-template-columns: minmax(0, 1fr); }
+.logbook-list, .logbook-events { list-style: none; padding: 0; margin: 0; }
+.logbook-list { display: grid; gap: 7px; max-height: 48vh; overflow: auto; padding: 3px; }
+.logbook-list button {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; width: 100%;
+  padding: 12px; text-align: left; border: 1px solid #aa90cb38; border-radius: 8px;
+  color: #f0e7ff; background: #221a30; cursor: pointer;
+}
+.logbook-list button:hover, .logbook-list button:focus-visible { border-color: #cda8f6; }
+.logbook-list button span:last-child { text-align: right; white-space: nowrap; }
+.logbook-list strong { font-size: 14px; }
+.logbook-list b { font-size: 11px; color: #b5f3df; }
+.logbook-list small { display: block; color: #c2b6d0; margin-top: 5px; font-size: 11px; line-height: 1.4; }
+#logbook-detail { max-height: 48vh; overflow: auto; padding: 14px; background: #1b1427; border: 1px solid #aa90cb38; border-radius: 8px; }
+#logbook-detail h3, #logbook-detail h4 { margin: 0 0 10px; }
+#logbook-detail > p, .logbook-empty { color: #c2b6d0; font-size: 13px; line-height: 1.5; }
+.logbook-metrics { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px 14px; margin: 14px 0; }
+.logbook-metrics div { border-bottom: 1px solid #aa90cb38; padding: 0 0 6px; }
+.logbook-metrics dt, .logbook-events small { color: #b5a7cb; font-size: 11px; }
+.logbook-metrics dd { margin: 3px 0 0; color: #f0e7ff; font-size: 13px; }
+.logbook-events li { border-left: 2px solid #a785d6; padding: 5px 10px; margin: 0 0 7px; background: #221a30; }
+.logbook-events strong { display: block; color: #eee2ff; margin: 3px 0; font-size: 13px; }
+.logbook-events p { color: #cec0dc; margin: 0; font-size: 12px; line-height: 1.5; }
+@media (max-width: 680px) {
+  .logbook-columns { grid-template-columns: minmax(0,1fr); }
+  .logbook-list { max-height: 32vh; }
+  .logbook-export { margin-left: 0; }
+  #logbook-detail { max-height: none; }
+}
+@media (max-width: 430px) {
+  .campaign-header-location, .campaign-user { display: none; }
+  .campaign-header-actions { gap: 5px; }
+  .campaign-screen .campaign-header .sector-button { padding: 7px; }
+  #campaign-progress { font-size: 9px; }
+}
